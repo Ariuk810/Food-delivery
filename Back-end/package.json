@@ -1,0 +1,28 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "chalk": "^5.6.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "figlet": "^1.9.3",
+    "jsonwebtoken": "^9.0.2",
+    "log-fuck": "^1.0.2",
+    "mongoose": "^8.19.1",
+    "ora": "^9.0.0",
+    "pokemon": "^3.3.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.9.0"
+  }
+}
