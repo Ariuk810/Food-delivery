@@ -31,7 +31,7 @@ export const FoodCard = (props) => {
     }
 
     try {
-      const res = await fetch(`http://localhost:1000/food/${foodId}`, {
+      const res = await fetch(`http://localhost:1000/food`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",

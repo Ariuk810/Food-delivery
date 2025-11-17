@@ -19,7 +19,6 @@ const options = {
 
 export default function Home() {
   const [categoryData, setCategoryData] = useState([]);
-  // const [foodInput, setFoodInput] = useState(false);
 
   const apiLink = `http://localhost:1000/category`;
 
@@ -29,6 +28,7 @@ export default function Home() {
 
     setCategoryData(jsonData);
   };
+  console.log(categoryData, "qwerf");
 
   useEffect(() => {
     getData();

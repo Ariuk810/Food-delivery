@@ -6,10 +6,31 @@ import { NomNom } from "./icons/NomNom";
 import { LocationIcon } from "./icons/Location";
 import { TbShoppingCartDollar } from "react-icons/tb";
 import { RiAdminFill } from "react-icons/ri";
-import { HomeFoodCard } from "./_components/HomeFoodCard";
+import { HomeFoodList } from "./_components/HomeFoodList";
+
+const options = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+  },
+};
 
 export default function Home() {
   const [admin, SetAdmin] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
+
+  const apiLink = `http://localhost:1000/category`;
+
+  const getData = async () => {
+    const data = await fetch(apiLink, options);
+    const jsonData = await data.json();
+
+    setCategoryData(jsonData);
+  };
+  console.log(categoryData, "qwerf");
+  useEffect(() => {
+    getData();
+  }, []);
 
   const router = useRouter();
 
@@ -56,18 +77,13 @@ export default function Home() {
         </div>
       </div>
       <img src="/BG.png" />
-      <div className="bg-gray-600 w-screen h-screen ">
-        <h3 className="font-bold text-3xl text-white flex pl-35 pt-15">
-          Appetizer
-        </h3>
-        <div className="flex flex-wrap gap-5 justify-center pt-15">
-          <HomeFoodCard />
-          <HomeFoodCard />
-          <HomeFoodCard />
-          <HomeFoodCard />
-          <HomeFoodCard />
-        </div>
-      </div>
+      {categoryData?.map((items, index) => (
+        <HomeFoodList
+          key={index}
+          categoryName={items.categoryName}
+          categoryId={items._id}
+        />
+      ))}
     </>
   );
 }
