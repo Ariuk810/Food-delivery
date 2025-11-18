@@ -3,8 +3,6 @@ import { FoodCard } from "@/app/_components/FoodCard";
 import { Key } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AddFood } from "./addFoods";
-const UPLOAD_PRESET = "Food delivery";
-const CLOUD_NAME = "dvxchfkte";
 
 const options = {
   method: "GET",
@@ -35,7 +33,9 @@ export const BigFoodCard = (props) => {
     <div className="bg-white  h-auto rounded-lg mt-[5%] pt-4 pl-4 ">
       <div className="flex items-center ">
         <p className="font-bold text-2xl text-black">{categoryName}</p>
-        <p className="font-bold text-2xl text-black">(6)</p>
+        <p className="font-bold text-2xl text-black">
+          ({categoryIdData.length})
+        </p>
       </div>
       <div className="flex gap-5 flex-wrap">
         <AddFood getData={getData} categoryId={categoryId} />
@@ -50,6 +50,7 @@ export const BigFoodCard = (props) => {
             categories={categories}
             foodId={category._id}
             getData={getData}
+            foodImage={category.Image}
           />
         ))}
       </div>

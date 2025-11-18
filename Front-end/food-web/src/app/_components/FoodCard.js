@@ -16,6 +16,7 @@ export const FoodCard = (props) => {
     foodCategory,
     categories,
     getData,
+    foodImage,
   } = props;
 
   const [editGang, setEditGang] = useState(false);
@@ -23,6 +24,7 @@ export const FoodCard = (props) => {
   const [editCategory, setEditCategory] = useState(foodCategory);
   const [editIngred, setEditIngred] = useState(foodIngred);
   const [editPrice, setEditPrice] = useState(foodPrice);
+  const [editImage, setEditImage] = useState(foodImage);
 
   const handleSubmit = async () => {
     if (!editName || !editPrice || !editIngred) {
@@ -41,6 +43,7 @@ export const FoodCard = (props) => {
           price: Number(editPrice),
           ingredients: editIngred,
           category: editCategory,
+          Image: editImage,
           id: foodId,
         }),
       });
@@ -51,10 +54,10 @@ export const FoodCard = (props) => {
       console.log(err);
     }
   };
-  console.log(foodId, "id bainuu");
+
   return (
     <div className="w-[270px] h-[241px] border border-gray-200 rounded-2xl pl-4 pt-3 relative">
-      <img src="/Hool.png" />
+      <img src={foodImage} />
       <button
         className="absolute top-20 right-5 bg-white rounded-full w-10 h-10 flex items-center justify-center"
         onClick={() => setEditGang(true)}
@@ -119,6 +122,12 @@ export const FoodCard = (props) => {
                 value={editPrice}
                 onChange={(e) => setEditPrice(e.target.value)}
               />
+            </div>
+            <div className="flex justify-between items-center pt-5">
+              <p className="text-gray-500">Image</p>
+              <div className="w-[288px] h-[116px]">
+                <img className="w-full h-full" src={foodImage}></img>
+              </div>
             </div>
 
             <div className="flex justify-between items-center pt-5">

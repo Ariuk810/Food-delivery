@@ -28,7 +28,6 @@ export default function Home() {
 
     setCategoryData(jsonData);
   };
-  console.log(categoryData, "qwerf");
 
   useEffect(() => {
     getData();

@@ -77,6 +77,7 @@ export default function Home() {
         </div>
       </div>
       <img src="/BG.png" />
+      <div></div>
       {categoryData?.map((items, index) => (
         <HomeFoodList
           key={index}

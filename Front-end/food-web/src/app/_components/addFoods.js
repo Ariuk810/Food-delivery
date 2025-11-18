@@ -1,10 +1,60 @@
 "use client";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+
+const UPLOAD_PRESET = "Food delivery";
+const CLOUD_NAME = "dvxchfkte";
 export const AddFood = ({ getData, categoryId }) => {
   const [foodInput, setFoodInput] = useState(false);
   const [newFoodName, setNewFoodName] = useState("");
   const [foodPrice, setFoodPrice] = useState("");
   const [foodIngred, setFoodIngred] = useState("");
+  const [logoUrl, setLogoUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    formData.append("upload_preset", UPLOAD_PRESET);
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+
+        {
+          method: "POST",
+
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      return data.secure_url;
+    } catch (error) {
+      console.error("Cloudinary upload failed:", error);
+    }
+  };
+
+  const handleLogoUpload = async (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    setUploading(true);
+
+    try {
+      const url = await uploadToCloudinary(file);
+
+      setLogoUrl(url);
+    } catch (err) {
+      console.log("Failed to upload logo: " + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (newFoodName.length === 0) {
@@ -19,6 +69,10 @@ export const AddFood = ({ getData, categoryId }) => {
       alert("foodIngred bicheechee");
       return;
     }
+    if (logoUrl.length === 0) {
+      alert("foodIngred bicheechee");
+      return;
+    }
     try {
       const res = await fetch("http://localhost:1000/food", {
         method: "POST",
@@ -30,6 +84,7 @@ export const AddFood = ({ getData, categoryId }) => {
           foodName: newFoodName,
           price: Number(foodPrice),
           ingredients: foodIngred,
+          Image: logoUrl,
           category: categoryId,
         }),
       });
@@ -91,10 +146,58 @@ export const AddFood = ({ getData, categoryId }) => {
             />
 
             <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4">
-              <p className="text-gray-400 text-center">
-                Choose a file or drag & drop it here
-              </p>
+              <input
+                className="text-gray-400 text-center"
+                type="file"
+                accept="image/*"
+                onChange={handleLogoUpload}
+                disabled={uploading}
+              ></input>
             </div>
+            {uploading && <p className="text-blue-600">Uploading...</p>}
+
+            {logoUrl && (
+              <div className="mt-4">
+                <p className="text-green-600 font-semibold mb-2">
+                  Logo uploaded!
+                </p>
+
+                <div className="relative w-64 h-64">
+                  <Image
+                    src={logoUrl}
+                    alt="Uploaded logo"
+                    fill
+                    className="object-contain rounded border border-gray-300"
+                  />
+                </div>
+
+                <p className="mt-2 text-sm text-gray-600 break-all">
+                  {logoUrl}
+                </p>
+              </div>
+            )}
+
+            {/* <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4 relative overflow-hidden">
+  {!logoUrl && (
+    <input
+      className="text-gray-400 text-center absolute inset-0 w-full h-full opacity-100 cursor-pointer"
+      type="file"
+      accept="image/*"
+      onChange={handleLogoUpload}
+      disabled={uploading}
+    />
+  )}
+  {logoUrl && (
+    <img
+      src={logoUrl}
+      alt="Uploaded logo"
+      className="object-contain w-full h-full"
+    />
+  )}
+  {!logoUrl && uploading && (
+    <p className="absolute text-blue-600">Uploading...</p>
+  )}
+</div> */}
 
             <button
               className="bg-black text-white rounded-md w-full py-2"
