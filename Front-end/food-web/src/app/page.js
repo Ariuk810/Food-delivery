@@ -68,8 +68,11 @@ export default function Home() {
             onClick={() => SetAdmin(true)}
           >
             {admin && (
-              <div className="w-30 h-25 bg-white ">
-                <p className="font-bold text-2xl">Test@gmail.com</p>
+              <div className="w-[188px] h-26 rounded-lg bg-white mr-20">
+                <p className="font-bold text-xl">Test@gmail.com</p>
+                <button className="w-20 h-9 bg-gray-300 text-black rounded-full mt-5 font-bold">
+                  Sign out
+                </button>
               </div>
             )}
             <RiAdminFill />

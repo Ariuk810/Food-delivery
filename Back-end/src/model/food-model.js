@@ -8,7 +8,7 @@ const FoodSchema = new Schema({
   foodName: String,
   price: { type: Number, require: true },
   category: { type: Schema.ObjectId, require: true, ref: `category` },
-  Image: { type: String, require: true },
+  image: { type: String, require: true },
   ingredients: { type: String, require: true },
   createdAt: { type: Date, require: true, default: Date.now },
   updatedAt: { type: Date, require: true, default: Date.now },

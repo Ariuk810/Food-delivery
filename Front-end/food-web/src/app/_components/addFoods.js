@@ -69,10 +69,11 @@ export const AddFood = ({ getData, categoryId }) => {
       alert("foodIngred bicheechee");
       return;
     }
-    if (logoUrl.length === 0) {
-      alert("foodIngred bicheechee");
+    if (!logoUrl) {
+      alert("Image upload hiine uu");
       return;
     }
+
     try {
       const res = await fetch("http://localhost:1000/food", {
         method: "POST",
@@ -84,7 +85,7 @@ export const AddFood = ({ getData, categoryId }) => {
           foodName: newFoodName,
           price: Number(foodPrice),
           ingredients: foodIngred,
-          Image: logoUrl,
+          image: logoUrl,
           category: categoryId,
         }),
       });
@@ -145,7 +146,7 @@ export const AddFood = ({ getData, categoryId }) => {
               onChange={(e) => setFoodIngred(e.target.value)}
             />
 
-            <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4">
+            {/* <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4">
               <input
                 className="text-gray-400 text-center"
                 type="file"
@@ -175,29 +176,29 @@ export const AddFood = ({ getData, categoryId }) => {
                   {logoUrl}
                 </p>
               </div>
-            )}
+            )} */}
 
-            {/* <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4 relative overflow-hidden">
-  {!logoUrl && (
-    <input
-      className="text-gray-400 text-center absolute inset-0 w-full h-full opacity-100 cursor-pointer"
-      type="file"
-      accept="image/*"
-      onChange={handleLogoUpload}
-      disabled={uploading}
-    />
-  )}
-  {logoUrl && (
-    <img
-      src={logoUrl}
-      alt="Uploaded logo"
-      className="object-contain w-full h-full"
-    />
-  )}
-  {!logoUrl && uploading && (
-    <p className="absolute text-blue-600">Uploading...</p>
-  )}
-</div> */}
+            <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4 relative overflow-hidden">
+              {!logoUrl && (
+                <input
+                  className="text-gray-400 text-center absolute inset-0 w-full h-full opacity-100 cursor-pointer"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoUpload}
+                  disabled={uploading}
+                />
+              )}
+              {logoUrl && (
+                <img
+                  src={logoUrl}
+                  alt="Uploaded logo"
+                  className="object-contain w-full h-full"
+                />
+              )}
+              {!logoUrl && uploading && (
+                <p className="absolute text-blue-600">Uploading...</p>
+              )}
+            </div>
 
             <button
               className="bg-black text-white rounded-md w-full py-2"

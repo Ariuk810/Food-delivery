@@ -1,12 +1,12 @@
 export const HomefoodCard = (props) => {
-  const { foodName, foodPrice, foodIngred } = props;
+  const { foodName, foodPrice, foodIngred, foodImage } = props;
   return (
     <div className="flex flex-wrap gap-5 justify-center pt-15">
       <div className="bg-white rounded-2xl shadow-md overflow-hidden w-full max-w-sm">
         {/* Image wrapper */}
         <div className="relative m-4 rounded-xl overflow-hidden">
           <img
-            src="/Tsuivan.png"
+            src={foodImage}
             alt="Sunshine Stackers"
             className="w-full h-48 object-cover rounded-xl"
           />

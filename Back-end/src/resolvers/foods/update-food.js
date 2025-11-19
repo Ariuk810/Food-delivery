@@ -8,6 +8,7 @@ export const updateFood = async (req, res) => {
     price: updatedFood.price,
     image: updatedFood.image,
     ingredients: updatedFood.ingredients,
+    category: updatedFood.category,
   });
   res.send("Food updated successfully!");
 };

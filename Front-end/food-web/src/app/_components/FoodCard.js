@@ -7,6 +7,9 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select";
 
+const UPLOAD_PRESET = "Food delivery";
+const CLOUD_NAME = "dvxchfkte";
+
 export const FoodCard = (props) => {
   const {
     foodId,
@@ -26,6 +29,54 @@ export const FoodCard = (props) => {
   const [editPrice, setEditPrice] = useState(foodPrice);
   const [editImage, setEditImage] = useState(foodImage);
 
+  const [imageEdit, setImageEdit] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    formData.append("upload_preset", UPLOAD_PRESET);
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+
+        {
+          method: "POST",
+
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      return data.secure_url;
+    } catch (error) {
+      console.error("Cloudinary upload failed:", error);
+    }
+  };
+
+  const handleLogoUpload = async (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    setUploading(true);
+
+    try {
+      const url = await uploadToCloudinary(file);
+
+      setLogoUrl(url);
+    } catch (err) {
+      console.log("Failed to upload logo: " + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!editName || !editPrice || !editIngred) {
       alert("All fields required!");
@@ -43,8 +94,8 @@ export const FoodCard = (props) => {
           price: Number(editPrice),
           ingredients: editIngred,
           category: editCategory,
-          Image: editImage,
           id: foodId,
+          image: logoUrl,
         }),
       });
 
@@ -54,10 +105,9 @@ export const FoodCard = (props) => {
       console.log(err);
     }
   };
-
   return (
     <div className="w-[270px] h-[241px] border border-gray-200 rounded-2xl pl-4 pt-3 relative">
-      <img src={foodImage} />
+      <img src={foodImage} className="w-60 h-[129px] rounded-lg " />
       <button
         className="absolute top-20 right-5 bg-white rounded-full w-10 h-10 flex items-center justify-center"
         onClick={() => setEditGang(true)}
@@ -125,9 +175,79 @@ export const FoodCard = (props) => {
             </div>
             <div className="flex justify-between items-center pt-5">
               <p className="text-gray-500">Image</p>
-              <div className="w-[288px] h-[116px]">
-                <img className="w-full h-full" src={foodImage}></img>
+
+              <div className="w-[288px] h-[116px] relative">
+                {/* Хэрвээ засахгүй бол хуучин зураг */}
+                {!imageEdit && (
+                  <>
+                    <img className="w-full h-full rounded-lg" src={foodImage} />
+                    <button
+                      className="absolute top-2 right-2 bg-white rounded-full w-7 h-7 flex items-center justify-center"
+                      onClick={() => setImageEdit(true)}
+                    >
+                      X
+                    </button>
+                  </>
+                )}
+
+                {/* Засах үед - яг энэ байрлалд upload хэсэг орно */}
+                {imageEdit && (
+                  <div className="absolute inset-0 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden">
+                    {!logoUrl && (
+                      <input
+                        className="absolute inset-0 w-full h-full opacity-100 cursor-pointer"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLogoUpload}
+                        disabled={uploading}
+                      />
+                    )}
+
+                    {logoUrl && (
+                      <img
+                        src={logoUrl}
+                        className="object-cover w-full h-full rounded-lg"
+                      />
+                    )}
+
+                    {!logoUrl && uploading && (
+                      <p className="absolute text-blue-600">Uploading...</p>
+                    )}
+                  </div>
+                )}
               </div>
+              {/* <div className="w-[288px] h-[116px]">
+                <img className="w-full h-full rounded-lg" src={foodImage}></img>
+                <button
+                  className="absolute top-95 right-8  bg-white rounded-full w-10 h-10 flex items-center justify-center text-gray-500 hover:text-black"
+                  onClick={() => setImageEdit(true)}
+                >
+                  x
+                </button>
+                {imageEdit && (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4 relative overflow-hidden">
+                    {!logoUrl && (
+                      <input
+                        className="text-gray-400 text-center absolute inset-0 w-full h-full opacity-100 cursor-pointer"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLogoUpload}
+                        disabled={uploading}
+                      />
+                    )}
+                    {logoUrl && (
+                      <img
+                        src={logoUrl}
+                        alt="Uploaded logo"
+                        className="object-contain w-full h-full"
+                      />
+                    )}
+                    {!logoUrl && uploading && (
+                      <p className="absolute text-blue-600">Uploading...</p>
+                    )}
+                  </div>
+                )}
+              </div> */}
             </div>
 
             <div className="flex justify-between items-center pt-5">

@@ -27,7 +27,7 @@ export const BigFoodCard = (props) => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [categoryId]);
 
   return (
     <div className="bg-white  h-auto rounded-lg mt-[5%] pt-4 pl-4 ">
@@ -40,17 +40,17 @@ export const BigFoodCard = (props) => {
       <div className="flex gap-5 flex-wrap">
         <AddFood getData={getData} categoryId={categoryId} />
 
-        {categoryIdData?.map((category, index) => (
+        {categoryIdData?.map((items, index) => (
           <FoodCard
             key={index}
-            foodName={category.foodName}
-            foodPrice={category.price}
-            foodIngred={category.ingredients}
-            foodCategory={category.category._id}
+            foodName={items.foodName}
+            foodPrice={items.price}
+            foodIngred={items.ingredients}
+            foodCategory={items.category._id}
             categories={categories}
-            foodId={category._id}
+            foodId={items._id}
             getData={getData}
-            foodImage={category.Image}
+            foodImage={items.image}
           />
         ))}
       </div>
