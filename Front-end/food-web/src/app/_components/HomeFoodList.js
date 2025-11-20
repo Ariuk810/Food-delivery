@@ -39,6 +39,7 @@ export const HomeFoodList = (props) => {
             foodPrice={items.price}
             foodIngred={items.ingredients}
             foodImage={items.image}
+            foodId={items._id}
           />
         ))}
       </div>

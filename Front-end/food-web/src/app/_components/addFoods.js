@@ -146,38 +146,6 @@ export const AddFood = ({ getData, categoryId }) => {
               onChange={(e) => setFoodIngred(e.target.value)}
             />
 
-            {/* <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4">
-              <input
-                className="text-gray-400 text-center"
-                type="file"
-                accept="image/*"
-                onChange={handleLogoUpload}
-                disabled={uploading}
-              ></input>
-            </div>
-            {uploading && <p className="text-blue-600">Uploading...</p>}
-
-            {logoUrl && (
-              <div className="mt-4">
-                <p className="text-green-600 font-semibold mb-2">
-                  Logo uploaded!
-                </p>
-
-                <div className="relative w-64 h-64">
-                  <Image
-                    src={logoUrl}
-                    alt="Uploaded logo"
-                    fill
-                    className="object-contain rounded border border-gray-300"
-                  />
-                </div>
-
-                <p className="mt-2 text-sm text-gray-600 break-all">
-                  {logoUrl}
-                </p>
-              </div>
-            )} */}
-
             <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4 relative overflow-hidden">
               {!logoUrl && (
                 <input
