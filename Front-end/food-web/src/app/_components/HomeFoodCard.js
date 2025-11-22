@@ -10,7 +10,7 @@ export const HomefoodCard = (props) => {
   const addToCart = () => {
     const foodToCart = {
       foodName,
-      foodPrice,
+      foodPrice: Number(foodPrice),
       foodIngred,
       count,
       foodId: foodId,
@@ -24,10 +24,10 @@ export const HomefoodCard = (props) => {
     const updated = [...prevCart, foodToCart];
     localStorage.setItem("cart", JSON.stringify(updated));
     setPushLocal(updated);
-
-    // localstorage.setItem
-    // console.log(foodId, "push id to local");
   };
+
+  // localstorage.setItem
+  // console.log(foodId, "push id to local");
 
   // console.log(pushLocal, "push to local");
 
@@ -61,7 +61,7 @@ export const HomefoodCard = (props) => {
                     className="w-9 h-9 border border-gray-400 rounded-full cursor-pointer ml-90 "
                     onClick={() => setAddCart(false)}
                   >
-                    x
+                    ✕
                   </button>
                   <h1 className="text-[#E65C4F] font-semibold text-2xl pt-3">
                     {foodName}
@@ -92,7 +92,10 @@ export const HomefoodCard = (props) => {
                   </div>
                   <button
                     className="w-[377px] h-11 bg-black rounded-full text-white mt-4"
-                    onClick={addToCart}
+                    onClick={() => {
+                      addToCart();
+                      // setAddCart(false);
+                    }}
                   >
                     Add to cart
                   </button>

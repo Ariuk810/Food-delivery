@@ -18,6 +18,7 @@ const options = {
 export default function Home() {
   const [admin, SetAdmin] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
+  const [orderDetail, setOrderDetail] = useState(false);
 
   const apiLink = `http://localhost:1000/category`;
 
@@ -60,9 +61,40 @@ export default function Home() {
             <p className="text-red-400 text-[13px]">Delivery address:</p>
             <p className="text-[13px]">Add Location</p>
           </button>
-          <button className="w-9 h-9 rounded-full flex justify-center items-center bg-white">
+          <button
+            className="w-9 h-9 rounded-full flex justify-center items-center bg-white"
+            onClick={() => setOrderDetail(true)}
+          >
             <TbShoppingCartDollar />
           </button>
+
+          {orderDetail && (
+            <div className="fixed inset-0 z-10 flex justify-end">
+              <div className="w-[525px] h-full bg-gray-500 p-9 ">
+                <div className="flex justify-between">
+                  <div className="flex items-center gap-5">
+                    <TbShoppingCartDollar className="w-9 h-9" />
+                    <h1 className="font-bold text-3xl text-white">
+                      Order detail
+                    </h1>
+                  </div>
+                  <button
+                    className="w-9 h-9 border border-white flex justify-center items-center text-white rounded-full"
+                    onClick={() => setOrderDetail(false)}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="w-[471px] h-11 bg-white flex items-center rounded-lg mt-5">
+                  <button className="w-[50%] bg-red-600 text-white rounded-full h-full">
+                    Cart
+                  </button>
+                  <button className="bg-white text-black w-[50%]">Order</button>
+                </div>
+                {/* <div className="w-471px] h-[532px] bg-white rounded-lg mt-5"></div> */}
+              </div>
+            </div>
+          )}
           <button
             className="w-9 h-9 rounded-full flex justify-center items-center bg-red-500"
             onClick={() => SetAdmin(true)}
@@ -80,7 +112,7 @@ export default function Home() {
         </div>
       </div>
       <img src="/BG.png" />
-      <div></div>
+
       {categoryData?.map((items, index) => (
         <HomeFoodList
           key={index}
