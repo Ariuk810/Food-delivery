@@ -14,6 +14,7 @@ export const HomefoodCard = (props) => {
       foodIngred,
       count,
       foodId: foodId,
+      foodImage,
     };
     // setPushLocal((prev) => [...prev, foodToCart]);
 
@@ -47,7 +48,7 @@ export const HomefoodCard = (props) => {
             className="absolute bottom-3 right-3 w-10 h-10 flex justify-center items-center bg-white text-red-500 rounded-full  shadow-md hover:bg-red-500 hover:text-white transition"
             onClick={() => setAddCart(true)}
           >
-            <span className="text-xl font-bold">+</span>
+            <span className="text-xl font-bold cursor-pointer">+</span>
           </button>
           {addCart && (
             <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-md ">
@@ -91,10 +92,11 @@ export const HomefoodCard = (props) => {
                     </div>
                   </div>
                   <button
-                    className="w-[377px] h-11 bg-black rounded-full text-white mt-4"
+                    className="w-[377px] h-11 bg-black rounded-full text-white mt-4 cursor-pointer"
                     onClick={() => {
                       addToCart();
-                      // setAddCart(false);
+                      setAddCart(false);
+                      setCount(1);
                     }}
                   >
                     Add to cart

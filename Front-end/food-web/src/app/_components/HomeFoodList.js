@@ -27,7 +27,7 @@ export const HomeFoodList = (props) => {
     getData();
   }, []);
   return (
-    <div className="bg-gray-600 w-screen h-full ">
+    <div className="bg-[#404040] w-screen h-full ">
       <h3 className="font-bold text-3xl text-white flex pl-35 pt-15">
         {categoryName}
       </h3>
