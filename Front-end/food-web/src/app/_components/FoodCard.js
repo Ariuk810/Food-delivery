@@ -216,38 +216,6 @@ export const FoodCard = (props) => {
                   </div>
                 )}
               </div>
-              {/* <div className="w-[288px] h-[116px]">
-                <img className="w-full h-full rounded-lg" src={foodImage}></img>
-                <button
-                  className="absolute top-95 right-8  bg-white rounded-full w-10 h-10 flex items-center justify-center text-gray-500 hover:text-black"
-                  onClick={() => setImageEdit(true)}
-                >
-                  x
-                </button>
-                {imageEdit && (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg h-40 flex items-center justify-center mb-4 relative overflow-hidden">
-                    {!logoUrl && (
-                      <input
-                        className="text-gray-400 text-center absolute inset-0 w-full h-full opacity-100 cursor-pointer"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleLogoUpload}
-                        disabled={uploading}
-                      />
-                    )}
-                    {logoUrl && (
-                      <img
-                        src={logoUrl}
-                        alt="Uploaded logo"
-                        className="object-contain w-full h-full"
-                      />
-                    )}
-                    {!logoUrl && uploading && (
-                      <p className="absolute text-blue-600">Uploading...</p>
-                    )}
-                  </div>
-                )}
-              </div> */}
             </div>
 
             <div className="flex justify-between items-center pt-5">

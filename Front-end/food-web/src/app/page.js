@@ -34,6 +34,7 @@ export default function Home() {
     setCartData(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
+
   const updateCount = (index, newCount) => {
     const newCart = [...cartData];
     newCart[index].count = newCount; // count шинэчилнэ
@@ -41,6 +42,15 @@ export default function Home() {
     setCartData(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart)); // localStorage-д хадгална
   };
+
+  // === PRICE CALCULATIONS ===
+  const items = cartData.reduce(
+    (sum, item) => sum + item.foodPrice * item.count,
+    0
+  );
+
+  const shipping = 5000;
+  const total = items + shipping;
 
   const apiLink = `http://localhost:1000/category`;
 
@@ -138,7 +148,7 @@ export default function Home() {
                     <div className="relative w-full">
                       <textarea
                         id="address"
-                        placeholder="  Please share your complete address " // хоосон placeholder
+                        placeholder="  Please share your complete address "
                         className="peer w-full h-32 px-3 pt-5 pb-2 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                       ></textarea>
                       <label
@@ -165,14 +175,16 @@ export default function Home() {
                       <p className="mt-3">Shipping</p>
                     </div>
                     <div className="text-black font-bold ">
-                      <p>3$</p>
-                      <p className="mt-3">5000</p>
+                      <p>{items.toLocaleString()}₮</p>
+                      <p className="mt-3">{shipping.toLocaleString()}₮</p>
                     </div>
                   </div>
                   <div className="border-b pb-5"></div>
                   <div className="flex justify-between mt-5">
                     <p className="text-gray-500">Total</p>
-                    <p className="text-black font-bold">123$</p>
+                    <p className="text-black font-bold">
+                      {total.toLocaleString()}₮
+                    </p>
                   </div>
                   <button className="w-full h-11 bg-red-500 rounded-full mt-5 text-white cursor-pointer">
                     Check out
