@@ -28,57 +28,26 @@ export default function Home() {
 
   const { token, user } = useContext(AuthContext);
 
+  const orderAPI = `http://localhost:1000/order`;
   const createOrder = async () => {
-    if (!token || !user) {
-      alert("Please login first!");
-      return;
-    }
-
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-    if (cart.length === 0) {
-      alert("Cart is empty!");
-      return;
-    }
-
-    const foodOrderItems = cart.map((item) => ({
-      food: item.foodId,
-      quantity: item.count,
-    }));
-
     const postOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         accept: "application/json",
-        authorization: `Bearer ${token}`, // Bearer-тэй token
       },
       body: JSON.stringify({
         status: "PENDING",
         totalPrice: total,
-        user: user._id, // user context
-        foodOrderItems: foodOrderItems,
+        user: user._id,
+        foodOrderItems: [foodPrice, count],
       }),
     };
+    const data = await fetch(orderAPI, postOptions);
+    const jsonData = await data.json();
 
-    try {
-      const res = await fetch("http://localhost:1000/order", postOptions);
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Order successfully created!");
-        localStorage.removeItem("cart");
-        setCartData([]);
-        setOrderDetail(false);
-        setOrderData(data);
-      } else {
-        alert("Order failed: " + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong!");
-    }
+    setOrderData(jsonData);
   };
+  console.log(createOrder, "order post");
 
   // GET LOCAL STORAGE
   useEffect(() => {
