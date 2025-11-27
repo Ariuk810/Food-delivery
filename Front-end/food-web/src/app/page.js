@@ -1,13 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext, use } from "react";
 import { NomNom } from "./icons/NomNom";
 import { LocationIcon } from "./icons/Location";
 import { TbShoppingCartDollar } from "react-icons/tb";
 import { RiAdminFill } from "react-icons/ri";
 import { HomeFoodList } from "./_components/HomeFoodList";
 import { OrderDetailCard } from "./_components/orderDetailCard";
+import { AuthContext } from "./_context/authContext";
+// import { headers } from "next/headers";
 
 const options = {
   method: "GET",
@@ -21,7 +23,64 @@ export default function Home() {
   const [categoryData, setCategoryData] = useState([]);
   const [orderDetail, setOrderDetail] = useState(false);
   const [cartData, setCartData] = useState([]);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
+  const [orderData, setOrderData] = useState([]);
 
+  const { token, user } = useContext(AuthContext);
+
+  const createOrder = async () => {
+    if (!token || !user) {
+      alert("Please login first!");
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    if (cart.length === 0) {
+      alert("Cart is empty!");
+      return;
+    }
+
+    const foodOrderItems = cart.map((item) => ({
+      food: item.foodId,
+      quantity: item.count,
+    }));
+
+    const postOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+        authorization: `Bearer ${token}`, // Bearer-тэй token
+      },
+      body: JSON.stringify({
+        status: "PENDING",
+        totalPrice: total,
+        user: user._id, // user context
+        foodOrderItems: foodOrderItems,
+      }),
+    };
+
+    try {
+      const res = await fetch("http://localhost:1000/order", postOptions);
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Order successfully created!");
+        localStorage.removeItem("cart");
+        setCartData([]);
+        setOrderDetail(false);
+        setOrderData(data);
+      } else {
+        alert("Order failed: " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
+  };
+
+  // GET LOCAL STORAGE
   useEffect(() => {
     if (orderDetail) {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -118,42 +177,133 @@ export default function Home() {
                   </button>
                 </div>
                 <div className="w-[471px] h-11 bg-white flex items-center rounded-lg mt-5">
-                  <button className="w-[50%] bg-red-600 text-white rounded-full h-full">
+                  <button
+                    className={`w-[50%] h-full rounded-full ${
+                      !showOrderHistory ? "bg-red-600 text-white" : "text-black"
+                    }`}
+                    onClick={() => setShowOrderHistory(false)}
+                  >
                     Cart
                   </button>
-                  <button className="bg-white text-black w-[50%]">Order</button>
-                </div>
-                <div className="w-[471px] h-[532px] bg-white rounded-lg mt-5 p-5 overflow-scroll">
-                  <p className="text-2xl text-gray-500 font-bold">My cart</p>
-                  <div>
-                    {cartData?.map((item, index) => (
-                      <OrderDetailCard
-                        key={index}
-                        cartIndex={index}
-                        foodname={item.foodName}
-                        foodprice={item.foodPrice}
-                        count={item.count}
-                        foodingred={item.foodIngred}
-                        foodImage={item.foodImage}
-                        onDelete={deleteFromCart}
-                        onCountChange={updateCount}
-                      />
-                    ))}
-                  </div>
 
-                  <div>
-                    <h1 className="font-bold text-2xl text-gray-500">
-                      Delivery location
-                    </h1>
-                    <div className="relative w-full">
-                      <textarea
-                        id="address"
-                        placeholder="  Please share your complete address "
-                        className="peer w-full h-32 px-3 pt-5 pb-2 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      ></textarea>
-                      <label
-                        htmlFor="address"
-                        className="absolute left-3 top-2 text-gray-400 text-sm transition-all duration-200
+                  <button
+                    className={`w-[50%] h-full rounded-full ${
+                      showOrderHistory ? "bg-red-600 text-white" : "text-black"
+                    }`}
+                    onClick={() => setShowOrderHistory(true)}
+                  >
+                    Order
+                  </button>
+                </div>
+                {showOrderHistory && (
+                  <div className="w-full max-w-[480px] h-auto bg-white mt-5 rounded-2xl shadow-md mx-auto">
+                    <div className="p-5">
+                      <p className="text-2xl font-bold text-black">
+                        Order history
+                      </p>
+
+                      <div className="mt-6 border-b pb-6">
+                        <div className="flex justify-between items-center">
+                          <p className="text-xl font-semibold">
+                            $26.97 (#20156)
+                          </p>
+                          <span className="px-3 py-1 border border-red-400 text-red-500 rounded-full text-sm">
+                            Pending
+                          </span>
+                        </div>
+
+                        <div className="mt-3 space-y-2">
+                          <div className="flex justify-between">
+                            <p className="text-gray-600">Sunshine Stackers</p>
+                            <p>x1</p>
+                          </div>
+                          <div className="flex justify-between">
+                            <p className="text-gray-600">Sunshine Stackers</p>
+                            <p>x1</p>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-gray-500 mt-2">
+                            <span>🕒</span>
+                            <p>2024/12/20</p>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-gray-500">
+                            <span>📍</span>
+                            <p className="truncate">
+                              2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг...
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-6">
+                        <div className="flex justify-between items-center">
+                          <p className="text-xl font-semibold">
+                            $12.99 (#20156)
+                          </p>
+                          <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                            Delivered
+                          </span>
+                        </div>
+
+                        <div className="mt-3 space-y-2">
+                          <div className="flex justify-between">
+                            <p className="text-gray-600">Sunshine Stackers</p>
+                            <p>x1</p>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-gray-500 mt-2">
+                            <span>🕒</span>
+                            <p>2024/12/20</p>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-gray-500">
+                            <span>📍</span>
+                            <p className="truncate">
+                              2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг...
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {!showOrderHistory && (
+                  <>
+                    <div className="w-[471px] h-[532px] bg-white rounded-lg mt-5 p-5 overflow-scroll">
+                      <p className="text-2xl text-gray-500 font-bold">
+                        My cart
+                      </p>
+                      <div>
+                        {cartData?.map((item, index) => (
+                          <OrderDetailCard
+                            key={index}
+                            cartIndex={index}
+                            foodname={item.foodName}
+                            foodprice={item.foodPrice}
+                            count={item.count}
+                            foodingred={item.foodIngred}
+                            foodImage={item.foodImage}
+                            onDelete={deleteFromCart}
+                            onCountChange={updateCount}
+                          />
+                        ))}
+                      </div>
+
+                      <div>
+                        <h1 className="font-bold text-2xl text-gray-500">
+                          Delivery location
+                        </h1>
+                        <div className="relative w-full">
+                          <textarea
+                            id="address"
+                            placeholder="  Please share your complete address "
+                            className="peer w-full h-32 px-3 pt-5 pb-2 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          ></textarea>
+                          <label
+                            htmlFor="address"
+                            className="absolute left-3 top-2 text-gray-400 text-sm transition-all duration-200
                pointer-events-none
                peer-placeholder-shown:top-5
                peer-placeholder-shown:text-gray-400
@@ -161,35 +311,40 @@ export default function Home() {
                peer-focus:top-2
                peer-focus:text-sm
                peer-focus:text-blue-500"
-                      ></label>
+                          ></label>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="w-[471px] h-[276px] bg-white rounded-lg mt-10 p-5">
-                  <h1 className="font-bold text-2xl text-gray-500">
-                    Payment info
-                  </h1>
-                  <div className="flex justify-between items-center mt-3 ">
-                    <div className="text-gray-500 ">
-                      <p>Items</p>
-                      <p className="mt-3">Shipping</p>
+                    <div className="w-[471px] h-[276px] bg-white rounded-lg mt-10 p-5">
+                      <h1 className="font-bold text-2xl text-gray-500">
+                        Payment info
+                      </h1>
+                      <div className="flex justify-between items-center mt-3 ">
+                        <div className="text-gray-500 ">
+                          <p>Items</p>
+                          <p className="mt-3">Shipping</p>
+                        </div>
+                        <div className="text-black font-bold ">
+                          <p>{items.toLocaleString()}₮</p>
+                          <p className="mt-3">{shipping.toLocaleString()}₮</p>
+                        </div>
+                      </div>
+                      <div className="border-b pb-5"></div>
+                      <div className="flex justify-between mt-5">
+                        <p className="text-gray-500">Total</p>
+                        <p className="text-black font-bold">
+                          {total.toLocaleString()}₮
+                        </p>
+                      </div>
+                      <button
+                        className="w-full h-11 bg-red-500 rounded-full mt-5 text-white cursor-pointer"
+                        onClick={createOrder}
+                      >
+                        Check out
+                      </button>
                     </div>
-                    <div className="text-black font-bold ">
-                      <p>{items.toLocaleString()}₮</p>
-                      <p className="mt-3">{shipping.toLocaleString()}₮</p>
-                    </div>
-                  </div>
-                  <div className="border-b pb-5"></div>
-                  <div className="flex justify-between mt-5">
-                    <p className="text-gray-500">Total</p>
-                    <p className="text-black font-bold">
-                      {total.toLocaleString()}₮
-                    </p>
-                  </div>
-                  <button className="w-full h-11 bg-red-500 rounded-full mt-5 text-white cursor-pointer">
-                    Check out
-                  </button>
-                </div>
+                  </>
+                )}
               </div>
             </div>
           )}
