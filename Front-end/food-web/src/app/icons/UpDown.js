@@ -1,6 +1,7 @@
-export const UpDown = () => {
+export const UpDown = ({ className = "" }) => {
   return (
     <svg
+      className={className}
       width="8"
       height="12"
       viewBox="0 0 8 12"

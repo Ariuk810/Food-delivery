@@ -18,6 +18,7 @@ const OrderSchema = new Schema({
   totalPrice: { type: Number, require: true },
   updatedAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now },
+  address: { type: String, require: true },
 });
 
 export const orderModel = mongoose.model("order", OrderSchema);

@@ -22,32 +22,59 @@ export default function Home() {
   const [admin, SetAdmin] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [orderDetail, setOrderDetail] = useState(false);
+  const [orderOpen, setOrderOpen] = useState(false);
   const [cartData, setCartData] = useState([]);
-  const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [orderData, setOrderData] = useState([]);
-
   const { token, user } = useContext(AuthContext);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [textArea, setTextarea] = useState("");
+
+  const getOrderHistory = async () => {
+    if (!user?._id) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:1000/order/${user._id}`,
+        options
+      );
+      const jsonData = await res.json();
+      setOrderHistory(jsonData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  console.log(orderHistory, "order get bainuu");
 
   const orderAPI = `http://localhost:1000/order`;
   const createOrder = async () => {
+    if (!textArea) {
+      alert("Address bichne uu!!!!");
+      return;
+    }
     const postOptions = {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         accept: "application/json",
       },
+
       body: JSON.stringify({
         status: "PENDING",
         totalPrice: total,
         user: user._id,
-        foodOrderItems: [foodPrice, count],
+        foodOrderItems: cartData,
+        address: textArea,
       }),
     };
+
     const data = await fetch(orderAPI, postOptions);
     const jsonData = await data.json();
 
     setOrderData(jsonData);
+    localStorage.removeItem("cart");
+    setCartData([]);
+    setTextarea("");
   };
-  console.log(createOrder, "order post");
 
   // GET LOCAL STORAGE
   useEffect(() => {
@@ -73,7 +100,7 @@ export default function Home() {
 
   // === PRICE CALCULATIONS ===
   const items = cartData.reduce(
-    (sum, item) => sum + item.foodPrice * item.count,
+    (sum, item) => sum + item.foodPrice * item.quantity,
     0
   );
 
@@ -92,6 +119,9 @@ export default function Home() {
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    getOrderHistory();
+  }, [user]);
 
   const router = useRouter();
 
@@ -148,97 +178,76 @@ export default function Home() {
                 <div className="w-[471px] h-11 bg-white flex items-center rounded-lg mt-5">
                   <button
                     className={`w-[50%] h-full rounded-full ${
-                      !showOrderHistory ? "bg-red-600 text-white" : "text-black"
+                      !orderOpen ? "bg-red-600 text-white" : "text-black"
                     }`}
-                    onClick={() => setShowOrderHistory(false)}
+                    onClick={() => setOrderOpen(false)}
                   >
                     Cart
                   </button>
 
                   <button
                     className={`w-[50%] h-full rounded-full ${
-                      showOrderHistory ? "bg-red-600 text-white" : "text-black"
+                      orderOpen ? "bg-red-600 text-white" : "text-black"
                     }`}
-                    onClick={() => setShowOrderHistory(true)}
+                    onClick={() => setOrderOpen(true)}
                   >
                     Order
                   </button>
                 </div>
-                {showOrderHistory && (
+                {orderOpen && (
                   <div className="w-full max-w-[480px] h-auto bg-white mt-5 rounded-2xl shadow-md mx-auto">
                     <div className="p-5">
                       <p className="text-2xl font-bold text-black">
                         Order history
                       </p>
 
-                      <div className="mt-6 border-b pb-6">
-                        <div className="flex justify-between items-center">
-                          <p className="text-xl font-semibold">
-                            $26.97 (#20156)
-                          </p>
-                          <span className="px-3 py-1 border border-red-400 text-red-500 rounded-full text-sm">
-                            Pending
-                          </span>
-                        </div>
-
-                        <div className="mt-3 space-y-2">
-                          <div className="flex justify-between">
-                            <p className="text-gray-600">Sunshine Stackers</p>
-                            <p>x1</p>
-                          </div>
-                          <div className="flex justify-between">
-                            <p className="text-gray-600">Sunshine Stackers</p>
-                            <p>x1</p>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-gray-500 mt-2">
-                            <span>🕒</span>
-                            <p>2024/12/20</p>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-gray-500">
-                            <span>📍</span>
-                            <p className="truncate">
-                              2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг...
+                      {orderHistory?.map((order, index) => (
+                        <div key={index} className="mt-6 border-b pb-6">
+                          <div className="flex justify-between items-center">
+                            <p className="text-xl font-semibold">
+                              {order.totalPrice}₮ (#{order._id.slice(-5)})
                             </p>
+
+                            <span
+                              className={`px-3 py-1 border rounded-full text-sm ${
+                                order.status === "PENDING"
+                                  ? "border-red-400 text-red-500"
+                                  : "bg-gray-100 text-gray-700"
+                              }`}
+                            >
+                              {order.status}
+                            </span>
+                          </div>
+
+                          <div className="mt-3 space-y-2">
+                            {order.foodOrderItems?.map((item, idx) => (
+                              <div key={idx} className="flex justify-between">
+                                <p className="text-gray-600">{item.foodName}</p>
+                                <p>x{item.quantity}</p>
+                              </div>
+                            ))}
+
+                            <div className="flex items-center gap-2 text-gray-500 mt-2">
+                              <span>🕒</span>
+                              <p>
+                                {new Date(order.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-gray-500">
+                              <span>📍</span>
+                              <p className="truncate">
+                                {order.address || "No address"}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-
-                      <div className="mt-6">
-                        <div className="flex justify-between items-center">
-                          <p className="text-xl font-semibold">
-                            $12.99 (#20156)
-                          </p>
-                          <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                            Delivered
-                          </span>
-                        </div>
-
-                        <div className="mt-3 space-y-2">
-                          <div className="flex justify-between">
-                            <p className="text-gray-600">Sunshine Stackers</p>
-                            <p>x1</p>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-gray-500 mt-2">
-                            <span>🕒</span>
-                            <p>2024/12/20</p>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-gray-500">
-                            <span>📍</span>
-                            <p className="truncate">
-                              2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг...
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 )}
 
-                {!showOrderHistory && (
+                {!orderOpen && (
                   <>
                     <div className="w-[471px] h-[532px] bg-white rounded-lg mt-5 p-5 overflow-scroll">
                       <p className="text-2xl text-gray-500 font-bold">
@@ -251,7 +260,7 @@ export default function Home() {
                             cartIndex={index}
                             foodname={item.foodName}
                             foodprice={item.foodPrice}
-                            count={item.count}
+                            count={item.quantity}
                             foodingred={item.foodIngred}
                             foodImage={item.foodImage}
                             onDelete={deleteFromCart}
@@ -269,6 +278,8 @@ export default function Home() {
                             id="address"
                             placeholder="  Please share your complete address "
                             className="peer w-full h-32 px-3 pt-5 pb-2 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            value={textArea}
+                            onChange={(e) => setTextarea(e.target.value)}
                           ></textarea>
                           <label
                             htmlFor="address"

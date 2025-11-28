@@ -8,7 +8,7 @@ import { getOrderByUserId } from "../resolvers/orders/get-order-by-user.js";
 export const orderRouter = express.Router();
 
 orderRouter.get("/", getOrder);
-orderRouter.get("/userId", getOrderByUserId);
+orderRouter.get("/:userId", getOrderByUserId);
 orderRouter.post("/", createOrder);
 orderRouter.put("/", updateOrder);
 orderRouter.delete("/", deleteOrder);

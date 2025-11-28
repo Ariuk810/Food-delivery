@@ -14,11 +14,13 @@ export const AuthProvider = ({ children }) => {
       const rawData = await fetch("http://localhost:1000/users/me", {
         method: "GET",
         headers: {
-          authorization: localToken,
+          authorization: `${localToken}`,
         },
       });
       const data = await rawData.json();
-      setUser(data.user);
+      console.log(data, "data");
+
+      setUser(data);
       setLoading(false);
     } catch (err) {
       console.log(err);

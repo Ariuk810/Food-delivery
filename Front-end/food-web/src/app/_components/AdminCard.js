@@ -21,7 +21,7 @@ export const AdminCard = (props) => {
       <p className="text-gray-500 w-[213px] ml-10 h-14">{delivery}</p>
       <div className="w-14  ml-10">
         <button className=" w-[94px] h-8 border border-red-600 rounded-2xl text-black flex items-center justify-center gap-2">
-          <p className="font-bold">Pending</p>
+          <p className="font-bold">{state || "Pending"}</p>
           <UpDown />
         </button>
       </div>

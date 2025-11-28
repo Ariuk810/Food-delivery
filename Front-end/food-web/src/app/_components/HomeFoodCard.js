@@ -4,7 +4,7 @@ export const HomefoodCard = (props) => {
   const { foodName, foodPrice, foodIngred, foodImage, foodId } = props;
 
   const [addCart, setAddCart] = useState(false);
-  const [count, setCount] = useState(1);
+  const [quantity, setCount] = useState(1);
   const [pushLocal, setPushLocal] = useState([]);
 
   const addToCart = () => {
@@ -12,15 +12,13 @@ export const HomefoodCard = (props) => {
       foodName,
       foodPrice: Number(foodPrice),
       foodIngred,
-      count,
-      foodId: foodId,
+      quantity,
+      food: foodId,
       foodImage,
     };
     // setPushLocal((prev) => [...prev, foodToCart]);
 
     const prevCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-    console.log(prevCart);
 
     const updated = [...prevCart, foodToCart];
     localStorage.setItem("cart", JSON.stringify(updated));
@@ -76,16 +74,16 @@ export const HomefoodCard = (props) => {
                     <div className="flex items-center gap-3.5">
                       <button
                         className="w-11 h-11 rounded-full border border-gray-400"
-                        onClick={() => count > 1 && setCount(count - 1)}
+                        onClick={() => quantity > 1 && setCount(quantity - 1)}
                       >
                         -
                       </button>
 
-                      <p className="text-2xl">{count}</p>
+                      <p className="text-2xl">{quantity}</p>
 
                       <button
                         className="w-11 h-11 rounded-full border border-gray-400"
-                        onClick={() => setCount(count + 1)}
+                        onClick={() => setCount(quantity + 1)}
                       >
                         +
                       </button>
