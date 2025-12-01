@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const UPLOAD_PRESET = "Food delivery";
 const CLOUD_NAME = "dvxchfkte";
-export const AddFood = ({ getData, categoryId }) => {
+export const AddFood = ({ getData, categoryId, categoryName }) => {
   const [foodInput, setFoodInput] = useState(false);
   const [newFoodName, setNewFoodName] = useState("");
   const [foodPrice, setFoodPrice] = useState("");
@@ -107,7 +107,7 @@ export const AddFood = ({ getData, categoryId }) => {
           +
         </button>
         <p className="text-center text-black font-medium">
-          Add new Dish to <br /> Appetizers
+          Add new Dish to <br /> {categoryName}
         </p>
       </div>
       {foodInput && (

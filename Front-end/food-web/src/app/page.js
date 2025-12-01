@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useContext, use } from "react";
+import { useEffect, useState, useContext } from "react";
 import { NomNom } from "./icons/NomNom";
 import { LocationIcon } from "./icons/Location";
 import { TbShoppingCartDollar } from "react-icons/tb";
@@ -222,7 +222,9 @@ export default function Home() {
                           <div className="mt-3 space-y-2">
                             {order.foodOrderItems?.map((item, idx) => (
                               <div key={idx} className="flex justify-between">
-                                <p className="text-gray-600">{item.foodName}</p>
+                                <p className="text-gray-600">
+                                  {item.food?.foodName}
+                                </p>
                                 <p>x{item.quantity}</p>
                               </div>
                             ))}

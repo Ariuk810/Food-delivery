@@ -38,7 +38,11 @@ export const BigFoodCard = (props) => {
         </p>
       </div>
       <div className="flex gap-5 flex-wrap">
-        <AddFood getData={getData} categoryId={categoryId} />
+        <AddFood
+          getData={getData}
+          categoryId={categoryId}
+          categoryName={categoryName}
+        />
 
         {categoryIdData?.map((items, index) => (
           <FoodCard
