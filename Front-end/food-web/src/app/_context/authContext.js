@@ -11,12 +11,15 @@ export const AuthProvider = ({ children }) => {
 
   const getUser = async (localToken) => {
     try {
-      const rawData = await fetch("http://localhost:1000/users/me", {
-        method: "GET",
-        headers: {
-          authorization: `${localToken}`,
-        },
-      });
+      const rawData = await fetch(
+        "https://food-delivery-1-pwgq.onrender.com/users/me",
+        {
+          method: "GET",
+          headers: {
+            authorization: `${localToken}`,
+          },
+        }
+      );
       const data = await rawData.json();
       console.log(data, "data");
 

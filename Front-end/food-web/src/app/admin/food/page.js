@@ -20,7 +20,7 @@ const options = {
 export default function Home() {
   const [categoryData, setCategoryData] = useState([]);
 
-  const apiLink = `http://localhost:1000/category`;
+  const apiLink = `https://food-delivery-1-pwgq.onrender.com/category`;
 
   const getData = async () => {
     const data = await fetch(apiLink, options);

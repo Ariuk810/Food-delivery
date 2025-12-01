@@ -14,7 +14,7 @@ export const HomeFoodList = (props) => {
 
   const [categoryIdData, setCategoryIdData] = useState([]);
 
-  const categoryAPI = `http://localhost:1000/food/${categoryId}`;
+  const categoryAPI = `https://food-delivery-1-pwgq.onrender.com/food/${categoryId}`;
 
   const getData = async () => {
     const data = await fetch(categoryAPI, options);

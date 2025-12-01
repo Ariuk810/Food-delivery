@@ -7,7 +7,9 @@ export const OrderHistory = () => {
 
   const loadOrders = async () => {
     try {
-      const res = await fetch("http://localhost:1000/order");
+      const res = await fetch(
+        "https://food-delivery-1-pwgq.onrender.com/order"
+      );
       const data = await res.json();
       setOrders(data);
     } catch (err) {

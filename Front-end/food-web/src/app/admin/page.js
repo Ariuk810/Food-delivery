@@ -16,12 +16,15 @@ export default function Home() {
 
   const getOrders = async () => {
     try {
-      const res = await fetch("http://localhost:1000/order", {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-        },
-      });
+      const res = await fetch(
+        "https://food-delivery-1-pwgq.onrender.com/order",
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+          },
+        }
+      );
       const jsonData = await res.json();
       setOrders(jsonData);
     } catch (err) {
@@ -88,7 +91,7 @@ export default function Home() {
 
     try {
       for (const orderId of selectedOrders) {
-        await fetch("http://localhost:1000/order", {
+        await fetch("https://food-delivery-1-pwgq.onrender.com/order", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -111,7 +114,7 @@ export default function Home() {
 
   const handleSingleOrderStateChange = async (orderId, newStatus) => {
     try {
-      await fetch("http://localhost:1000/order", {
+      await fetch("https://food-delivery-1-pwgq.onrender.com/order", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

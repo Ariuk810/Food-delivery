@@ -84,20 +84,23 @@ export const FoodCard = (props) => {
     }
 
     try {
-      const res = await fetch(`http://localhost:1000/food`, {
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          foodName: editName,
-          price: Number(editPrice),
-          ingredients: editIngred,
-          category: editCategory,
-          id: foodId,
-          image: logoUrl,
-        }),
-      });
+      const res = await fetch(
+        `https://food-delivery-1-pwgq.onrender.com/food`,
+        {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            foodName: editName,
+            price: Number(editPrice),
+            ingredients: editIngred,
+            category: editCategory,
+            id: foodId,
+            image: logoUrl,
+          }),
+        }
+      );
 
       await getData();
       setEditGang(false);

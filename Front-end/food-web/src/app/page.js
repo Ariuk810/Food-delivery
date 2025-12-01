@@ -34,7 +34,7 @@ export default function Home() {
 
     try {
       const res = await fetch(
-        `http://localhost:1000/order/${user._id}`,
+        `https://food-delivery-1-pwgq.onrender.com/order/${user._id}`,
         options
       );
       const jsonData = await res.json();
@@ -45,7 +45,7 @@ export default function Home() {
   };
   console.log(orderHistory, "order get bainuu");
 
-  const orderAPI = `http://localhost:1000/order`;
+  const orderAPI = `https://food-delivery-1-pwgq.onrender.com/order`;
   const createOrder = async () => {
     if (!textArea) {
       alert("Address bichne uu!!!!");

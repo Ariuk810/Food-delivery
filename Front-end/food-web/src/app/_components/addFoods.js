@@ -75,20 +75,23 @@ export const AddFood = ({ getData, categoryId, categoryName }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:1000/food", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          accept: "application/json",
-        },
-        body: JSON.stringify({
-          foodName: newFoodName,
-          price: Number(foodPrice),
-          ingredients: foodIngred,
-          image: logoUrl,
-          category: categoryId,
-        }),
-      });
+      const res = await fetch(
+        "https://food-delivery-1-pwgq.onrender.com/food",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            foodName: newFoodName,
+            price: Number(foodPrice),
+            ingredients: foodIngred,
+            image: logoUrl,
+            category: categoryId,
+          }),
+        }
+      );
 
       await getData();
       setFoodInput(false);

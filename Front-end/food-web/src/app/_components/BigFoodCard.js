@@ -16,7 +16,7 @@ export const BigFoodCard = (props) => {
   // const [foodInput, setFoodInput] = useState(false);
   const [categoryIdData, setCategoryIdData] = useState([]);
 
-  const categoryAPI = `http://localhost:1000/food/${categoryId}`;
+  const categoryAPI = `https://food-delivery-1-pwgq.onrender.com/food/${categoryId}`;
 
   const getData = async () => {
     const data = await fetch(categoryAPI, options);
