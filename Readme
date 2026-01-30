@@ -1,0 +1,25 @@
+# Food Delivery Web Application
+
+Full-stack food ordering web application.
+
+##  Tech Stack
+- Node.js
+- Express.js
+- MongoDB
+- REST API
+- Next.js
+
+##  Features
+- Food listing
+- User data handling
+- CRUD operations
+- API integration
+
+## Screenshot
+![App Screenshot](01.00.53.png)
+
+## ▶ How to Run
+npm install
+npm run dev
+
+
