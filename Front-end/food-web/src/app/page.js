@@ -35,7 +35,7 @@ export default function Home() {
     try {
       const res = await fetch(
         `https://food-delivery-1-pwgq.onrender.com/order/${user._id}`,
-        options
+        options,
       );
       const jsonData = await res.json();
       setOrderHistory(jsonData);
@@ -101,7 +101,7 @@ export default function Home() {
   // === PRICE CALCULATIONS ===
   const items = cartData.reduce(
     (sum, item) => sum + item.foodPrice * item.quantity,
-    0
+    0,
   );
 
   const shipping = 5000;
@@ -126,10 +126,10 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (!token) router.push("/login");
-    }
+    // if (typeof window !== "undefined") {
+    //   const token = localStorage.getItem("token");
+    //   // if (!token) router.push("/login");
+    // }
   }, []);
 
   return (
